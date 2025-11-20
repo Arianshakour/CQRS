@@ -24,7 +24,7 @@ namespace Shop.Application.Dto.User.Validation
             }).WithMessage("همچین نام کاربری موجود می باشد");
 
             RuleFor(x => x.Email).EmailAddress().WithMessage("ایمیلی که وارد کردید درست نیست!");
-            RuleFor(x => x.password).Empty().WithMessage("نباید خالی باشد").Matches(@"[A-Z]+")
+            RuleFor(x => x.password).NotNull().WithMessage("نباید خالی باشد").Matches(@"[A-Z]+")
                 .WithMessage("رمز عبور باید شامل حروف بزرگ انگلیسی باشد").MinimumLength(6)
                 .WithMessage("طول پسورد شما کمتر از ۶ کارکتر می باشد");
         }

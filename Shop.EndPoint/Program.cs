@@ -1,6 +1,8 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Shop.Domain.Interfaces.Category;
 using Shop.Domain.Interfaces.Product;
 using Shop.Domain.Interfaces.User;
@@ -9,6 +11,7 @@ using Shop.Persistence.Repository.Category;
 using Shop.Persistence.Repository.Product;
 using Shop.Persistence.Repository.User;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +35,7 @@ builder.Services.AddMediatR(cfg =>
 });
 
 // sabte autoMapper
-//faqat package DependencyInjection nasb kon oon sadaro nasb nakon
+//faqat package AutoMapper.DependencyInjection nasb kon oon saadaro nasb nakon
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(Assembly.Load("Shop.Application"));
@@ -40,6 +43,27 @@ builder.Services.AddAutoMapper(cfg =>
 
 // sabte FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("Shop.Application"));
+
+// download package System.IdentityModel.Tokens.Jwt ar laye Application va Endpoint
+// sabte JWT va download package Authentication.JWTBearer dar laye Application va Endpoint
+// albate Application chon faqat tolide token hast niazi be JWTBearer nadare vali gozashtim behtare nabashe
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
 
 
 var app = builder.Build();
@@ -51,6 +75,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

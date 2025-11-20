@@ -17,17 +17,19 @@ namespace Shop.Application.Dto.User.Validation
             _userRepository = userRepository;
             RuleFor(x => x.FullName).NotEmpty().WithMessage("نام نباید خالی باشد");
             //inja chek mikonim ke hamchin usernamei dar db nabashe
-            RuleFor(x => x.UserName).Must((model, username) =>
-            {
-                var user = _userRepository.GetByUserName(username);
 
-                if (user == null)
-                    return true; // yani useri ke vared karde to db nist pas okeye
+            //raft dar Handler chek beshe
+            //RuleFor(x => x.UserName).Must((model, username) =>
+            //{
+            //    var user = _userRepository.GetByUserName(username);
 
-                return user.Id == model.Id;
-                // age true beshe yani useri ke vared karde male khodeshe pas moshkeli nis
-                // age false beshe yani useri ke vared karde male yki dgas pas khata bayad bede 
-            }).WithMessage("همچین نام کاربری موجود می باشد");
+            //    if (user == null)
+            //        return true; // yani useri ke vared karde to db nist pas okeye
+
+            //    return user.Id == model.Id;
+            //    // age true beshe yani useri ke vared karde male khodeshe pas moshkeli nis
+            //    // age false beshe yani useri ke vared karde male yki dgas pas khata bayad bede 
+            //}).WithMessage("همچین نام کاربری موجود می باشد");
 
 
             //faqat vaqti password bezane chek mishe age khali bede in validation haye zir chek nemishe

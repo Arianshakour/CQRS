@@ -29,8 +29,8 @@ namespace Shop.Application.Feature.Products.Handler.Query
         {
             var Products = _productRepository.GetAll();
             //return Task.FromResult(Result.Success(_mapper.Map<List<ProductDto>>(Products)));//Hatman Task bezan ke khata nade
-            //Andakhtan Name Category
             var dtoList = _mapper.Map<List<ProductDto>>(Products);
+            //Andakhtan Name Category
             foreach (var item in dtoList)
             {
                 item.Categoryname = _categoryRepository.GetCategoryname(item.CategoryId);

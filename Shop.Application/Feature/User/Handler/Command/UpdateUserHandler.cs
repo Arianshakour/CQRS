@@ -31,10 +31,17 @@ namespace Shop.Application.Feature.User.Handler.Command
                 return Task.FromResult(Result.ValidationFailure(errors));
             }
 
-            var user = _userRepository.GetById(request.update.Id);
+            var user = _userRepository.GetById(request.Id);
             if (user == null)
             {
                 mes = "کاربر یافت نشد";
+                return Task.FromResult(Result.Failure(mes));
+            }
+
+            var existingUser = _userRepository.GetByUserName(request.update.UserName);
+            if (existingUser != null && existingUser.Id != request.Id)
+            {
+                mes = "همچین نام کاربری موجود می باشد";
                 return Task.FromResult(Result.Failure(mes));
             }
 

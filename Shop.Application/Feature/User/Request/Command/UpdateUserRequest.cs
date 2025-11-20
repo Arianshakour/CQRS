@@ -11,6 +11,7 @@ namespace Shop.Application.Feature.User.Request.Command
 {
     public class UpdateUserRequest : IRequest<Result>
     {
+        public Guid Id { get; set; }   // az route mikhooni
         public UpdateUserDto update { get; set; }
     }
 }
