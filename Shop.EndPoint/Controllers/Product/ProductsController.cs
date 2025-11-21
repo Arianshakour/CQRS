@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Shop.Application.Dto.Base;
 using Shop.Application.Dto.Product;
 using Shop.Application.Feature.Products.Request.Command;
 using Shop.Application.Feature.Products.Request.Query;
@@ -21,9 +22,9 @@ namespace Shop.EndPoint.Controllers.Product
             return Ok(res);
         }
         [HttpGet("Products")]
-        public IActionResult GetAllProduct()
+        public IActionResult GetAllProduct([FromQuery] FilteringDto input)
         {
-            var res = _mediator.Send(new GetAllProudctRequest());
+            var res = _mediator.Send(new GetAllProudctRequest() { filter = input});
             return Ok(res);
         }
         [HttpPost("CreateProduct")]
