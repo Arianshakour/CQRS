@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shop.Domain.Entities.Cart;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,5 +21,8 @@ namespace Shop.Domain.Entities.Users
         {
             Id = Guid.NewGuid();
         }
+
+        //Relation
+        public List<ShoppingCart> ShoppingCarts { get; set; }
     }
 }

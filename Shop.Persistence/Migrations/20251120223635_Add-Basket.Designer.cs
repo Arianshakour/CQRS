@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop.Persistence.Context;
 
@@ -11,9 +12,11 @@ using Shop.Persistence.Context;
 namespace Shop.Persistence.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class ShopContextModelSnapshot : ModelSnapshot
+    [Migration("20251120223635_Add-Basket")]
+    partial class AddBasket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,12 +65,11 @@ namespace Shop.Persistence.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ShoppingCart", (string)null);
                 });
@@ -187,17 +189,6 @@ namespace Shop.Persistence.Migrations
                     b.Navigation("product");
                 });
 
-            modelBuilder.Entity("Shop.Domain.Entities.Cart.ShoppingCart", b =>
-                {
-                    b.HasOne("Shop.Domain.Entities.Users.User", "User")
-                        .WithMany("ShoppingCarts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Shop.Domain.Entities.Products.Product", b =>
                 {
                     b.HasOne("Shop.Domain.Entities.Categories.Category", "Category")
@@ -212,11 +203,6 @@ namespace Shop.Persistence.Migrations
             modelBuilder.Entity("Shop.Domain.Entities.Cart.ShoppingCart", b =>
                 {
                     b.Navigation("items");
-                });
-
-            modelBuilder.Entity("Shop.Domain.Entities.Users.User", b =>
-                {
-                    b.Navigation("ShoppingCarts");
                 });
 #pragma warning restore 612, 618
         }

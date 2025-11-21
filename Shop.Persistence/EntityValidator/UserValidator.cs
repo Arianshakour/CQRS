@@ -18,6 +18,9 @@ namespace Shop.Persistence.EntityValidator
             builder.Property(x => x.FullName).IsRequired().HasMaxLength(30);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
             builder.Property(x => x.UserName).IsRequired().HasMaxLength(80);
+
+            builder.HasMany(x => x.ShoppingCarts)
+                .WithOne(x => x.User).HasForeignKey(x => x.UserId);
         }
     }
 }

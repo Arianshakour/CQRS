@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop.Domain.Base;
+using Shop.Domain.Entities.Cart;
 using Shop.Domain.Entities.Categories;
 using Shop.Domain.Entities.Products;
 using Shop.Domain.Entities.Users;
@@ -21,12 +22,16 @@ namespace Shop.Persistence.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new CategoryValidator());
             modelBuilder.ApplyConfiguration(new ProductValidator());
             modelBuilder.ApplyConfiguration(new UserValidator());
+            modelBuilder.ApplyConfiguration(new CartItemValidator());
+            modelBuilder.ApplyConfiguration(new ShoppingCartValidator());
         }
     }
 }

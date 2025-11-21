@@ -3,10 +3,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Shop.Domain.Interfaces.Cart;
 using Shop.Domain.Interfaces.Category;
 using Shop.Domain.Interfaces.Product;
 using Shop.Domain.Interfaces.User;
 using Shop.Persistence.Context;
+using Shop.Persistence.Repository.Cart;
 using Shop.Persistence.Repository.Category;
 using Shop.Persistence.Repository.Product;
 using Shop.Persistence.Repository.User;
@@ -27,6 +29,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("ShopContext")));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
 
 // sabte MediatR
 builder.Services.AddMediatR(cfg =>
