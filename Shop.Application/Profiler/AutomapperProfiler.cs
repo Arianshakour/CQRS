@@ -18,6 +18,9 @@ namespace Shop.Application.Profiler
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<Product, CreateProductDto>().ReverseMap();
             CreateMap<Product, UpdateProductDto>().ReverseMap();
+            CreateMap<Product, ProductDto>()
+            .ForMember(dest => dest.Categoryname,
+                       opt => opt.MapFrom(src => src.Category.Name));
             CreateMap<User, CreateUserDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();

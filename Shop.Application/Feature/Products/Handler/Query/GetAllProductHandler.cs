@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Shop.Application.Dto.Product;
 using Shop.Application.Feature.Products.Request.Query;
 using Shop.Common.ResultPattern;
@@ -29,7 +30,8 @@ namespace Shop.Application.Feature.Products.Handler.Query
         public Task<Result> Handle(GetAllProudctRequest request, CancellationToken cancellationToken)
         {
             var Products = _productRepository.GetAll();
-            Products = Products.AsQueryable();
+            Products = Products.Include(x => x.Category);//baraye andakhtan name category va foreach nazadan
+            //to automapper ham bayad set koni
             if (!string.IsNullOrEmpty(request.filter.Search))
             {
                 Products = Products.Where(p => p.Name.Contains(request.filter.Search));
@@ -62,12 +64,24 @@ namespace Shop.Application.Feature.Products.Handler.Query
             Products = Products.Skip(skip).Take(request.filter.PageSize);
             //return products.ToList();
             //return Task.FromResult(Result.Success(_mapper.Map<List<ProductDto>>(Products)));//Hatman Task bezan ke khata nade
+
             var dtoList = _mapper.Map<List<ProductDto>>(Products);
-            //Andakhtan Name Category
-            foreach (var item in dtoList)
-            {
-                item.Categoryname = _categoryRepository.GetCategoryname(item.CategoryId);
-            }
+            //inam ravesh dasti bdone automapper
+            //var dtoList = Products.Select(p => new ProductDto
+            //{
+            //    Id = p.Id,
+            //    Name = p.Name,
+            //    Description = p.Description,
+            //    Price = p.Price,
+            //    CategoryId = p.CategoryId,
+            //    Categoryname = p.Category != null ? p.Category.Name : null
+            //}).ToList();
+
+            //Andakhtan Name Category ham injoori mishe ham ravesh dg ke alan hast to profile auto mapper zadam
+            //foreach (var item in dtoList)
+            //{
+            //    item.Categoryname = _categoryRepository.GetCategoryname(item.CategoryId);
+            //}
             return Task.FromResult(Result.Success(dtoList));
         }
     }
